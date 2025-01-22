@@ -14,8 +14,10 @@ export const ActivityItem = ({ title }: ActivityItemProps) => {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderTerminationRequest: () => false,
-      onPanResponderMove: Animated.event([
-        null, {dx: pan.x, dy: pan.y}], {useNativeDriver: false}),
+      onPanResponderMove: (event, gestureState) => {
+        Animated.event([
+          null, {dx: pan.x, dy: pan.y}], {useNativeDriver: false})(event, gestureState)
+      },
         onPanResponderRelease: () => {
           Animated.spring(pan, {
             toValue: {x:0, y:0},
