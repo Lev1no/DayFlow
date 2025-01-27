@@ -5,9 +5,13 @@ import { useRef } from "react";
 
 interface ActivityItemProps {
   title: string;
+  id: string;
+  onActivityChange: (activity: { id: string; state: boolean }) => void;
 }
 
-export const ActivityItem = ({ title }: ActivityItemProps) => {
+const TRESHOLD = 60;
+
+export const ActivityItem = ({ title, id, onActivityChange }: ActivityItemProps) => {
   const pan = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
@@ -15,6 +19,16 @@ export const ActivityItem = ({ title }: ActivityItemProps) => {
       onStartShouldSetPanResponder: () => true,
       onPanResponderTerminationRequest: () => false,
       onPanResponderMove: (event, gestureState) => {
+        const currentX = gestureState.dx;
+
+        if (currentX > TRESHOLD) {
+          onActivityChange({id, state: true});
+        }
+
+        if (currentX < -TRESHOLD) {
+          onActivityChange({id, state: false});
+        }
+
         Animated.event([
           null, {dx: pan.x, dy: pan.y}], {useNativeDriver: false})(event, gestureState)
       },

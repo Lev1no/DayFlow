@@ -6,6 +6,10 @@ import { FlowRow, FlowText } from "../components/overrides";
 
 export default function ActivityHomeScreen() {
 
+  const checkActivity = ({id, state}: {id: string, state: boolean}) => {
+    console.log(`Changing ${id} to active: ${state}`);
+  }
+
   return (
     <View style={styles.screenContainer}>
       <ActivityTimer></ActivityTimer>
@@ -17,7 +21,10 @@ export default function ActivityHomeScreen() {
        data={data}
        keyExtractor={({id}) => id}
        renderItem={({item}) =>
-        <ActivityItem title={item.title}/>
+        <ActivityItem 
+          {...item}
+          onActivityChange={checkActivity}
+       />
        }
       />
     </View>
